@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="page-header" id="banner">
+        <div class="row">
+            <h1>Robot Dashboard</h1>
+        </div>
+    </div>
+    <div class="row" id="load">
+        <button type="button" class="btn btn-success" onclick="load_robot();">Load Robot</button>
+    </div>   
+    <div id="dashboard">
+        <div class="row">
+            <button id="shutdown" type="button" class="btn btn-danger" onclick="shutdown_robot();">Shutdown Robot</button>
+            <button id="reconfig" type="button" class="btn btn-warning" onclick="new_ajax_helper('/reconfig_IMU');">Reconfigure IMU</button>
+            <button id="compass" type="button" class="btn btn-secondary" onclick="new_ajax_helper('/compass');">Set Compass</button>
+            <button id="sensors" type="button" class="btn btn-info" onclick="new_ajax_helper('/sensors');">Sensors</button>
+        </div>
+        <div class="row">
+            <div id="videobox" class="col">
+                <div id="videofeed"></div>
+            </div>
+            <div id="map"><div id="box" class="jxgbox col"></div></div>
+            <div id="message"></div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script> robot_enabled = {{robot_enabled}}; </script>
+    <script src="/static/js/dashboard.js"></script> 
+    <script src="/static/js/mapping.js"></script> 
+{% endblock %}

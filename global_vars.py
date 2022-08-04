@@ -1,0 +1,5 @@
+DATABASE = None
+GROVE = None
+CAMERA = None
+LOGGER = None
+SOUND = None
