@@ -1,6 +1,6 @@
 from flask import Flask, render_template, session, request, redirect, flash, url_for, jsonify, Response, logging
 from interfaces import databaseinterface, camerainterface, soundinterface
-import mygrove #robot is class that extends the brickpi class
+import mygrove #grove
 import global_vars as GLOBALS #load global variables
 import logging, time
 

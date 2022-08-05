@@ -1,17 +1,17 @@
 /* This is your dashboard javascript, it has been embedded into dashboard.html */
-//Load the Robot
-function load_robot()
+//Load the Grove
+function load_grove()
 {
     document.getElementById("load").style.display = 'none';
-    new_ajax_helper('/robotload', show_dashboard);
+    new_ajax_helper('/groveload', show_dashboard);
 }
 
-//Shutdown the Robot
-function shutdown_robot()
+//Shutdown the Grove
+function shutdown_grove()
 {
     hide_dashboard();
     document.getElementById("load").style.display = 'none';
-    new_ajax_helper('/robotshutdown', showloadbutton);
+    new_ajax_helper('/groveshutdown', showloadbutton);
 }
 
 function showloadbutton()
@@ -37,7 +37,7 @@ function hide_dashboard()
 }
 
 //hide or show dashboard based on initial value from server on page load
-if (robot_enabled == 1) {
+if (grove_enabled == 1) {
     show_dashboard();
 } else {
     hide_dashboard();

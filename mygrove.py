@@ -4,6 +4,15 @@ from interfaces.grovepiinterface import *
 import global_vars as GLOBALS
 import logging
 
-grove = create_grovepi()
+#if you wish to extend the grovepiinterface, you can do so here!
+class MyGrove(GrovePiInterface):
+
+    def __init__():
+        return
+
+
+    
+
+
 
 

@@ -4,7 +4,8 @@ LOADED = True
 try:
     import urlrequest
     import grove_rgb_lcd    
-    import grovepi #must have installed grovepi library                
+    import grovepi #must have installed grovepi library   
+    import grove_led_strip             
 except ImportError: #could be being called from flask file
     LOADED = False #must be trying to run from the web server.
 
@@ -13,6 +14,7 @@ class GrovePiInterface:
     # Any initialisation code should be here - could keep track of ports
     def __init__(self, logger=logging.getLogger()):
         self.logger = logger 
+        LOADED = True
         pass
 
     def log(self, message):
@@ -146,28 +148,5 @@ if __name__ == '__main__':
     grove = GrovePiInterface()
     if grove == None:
         exit()
-
-    for i in range(1000):
-        [temp,hum] = grove.read_temp_humidity_sensor_digitalport(7)
-        now = time.time()
-        dictofvalues = {"temp":temp,"hum":hum, "time":now}
-        print(dictofvalues)
-        url = "https://nielbrad.pythonanywhere.com/uploadhistory"
-        response = urlrequest.sendurlrequest(url, dictofvalues) #feel like a callback function should be used
-        print(response)
-        resultsdict = json.loads(response)
-        grove.set_OLED_I2C1_RGBtuple_message((255,0,0), resultsdict['message'])
-        time.sleep(2)
-
-
-#PLACE IN FLASK ON PYTHON to receive data sent
-'''# update the users location and access time
-@app.route('/uploadhistory', methods=['GET','POST'])
-def uploadhistory():
-    resultsdict = {"message":""}
-    if request.method == "POST":
-        temp = request.form.get('temp')
-        hum = request.form.get('hum')
-        resultsdict = {"message":"It is very hot"}
-    return jsonify(resultsdict)'''
+       
     

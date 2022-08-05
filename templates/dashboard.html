@@ -2,7 +2,7 @@
 {% block content %}
     <div class="page-header" id="banner">
         <div class="row">
-            <h1>Robot Dashboard</h1>
+            <h1>Grove Dashboard</h1>
         </div>
     </div>
     <div class="row" id="load">
@@ -10,10 +10,7 @@
     </div>   
     <div id="dashboard">
         <div class="row">
-            <button id="shutdown" type="button" class="btn btn-danger" onclick="shutdown_robot();">Shutdown Robot</button>
-            <button id="reconfig" type="button" class="btn btn-warning" onclick="new_ajax_helper('/reconfig_IMU');">Reconfigure IMU</button>
-            <button id="compass" type="button" class="btn btn-secondary" onclick="new_ajax_helper('/compass');">Set Compass</button>
-            <button id="sensors" type="button" class="btn btn-info" onclick="new_ajax_helper('/sensors');">Sensors</button>
+            <button id="shutdown" type="button" class="btn btn-danger" onclick="shutdown_grove();">Shutdown Grove</button>
         </div>
         <div class="row">
             <div id="videobox" class="col">
@@ -25,7 +22,7 @@
     </div>
 {% endblock %}
 {% block scripts %}
-    <script> robot_enabled = {{robot_enabled}}; </script>
+    <script> grove_enabled = {{grove_enabled}}; </script>
     <script src="/static/js/dashboard.js"></script> 
     <script src="/static/js/mapping.js"></script> 
 {% endblock %}
