@@ -158,9 +158,7 @@ if __name__ == '__main__':
     else:
         GROVE.set_led_digitalport_value(2,0)
         [temp,hum] = GROVE.read_temp_humidity_sensor_digitalport(3)
-        print(temp)
         light = GROVE.read_light_analogueport(1)
-        print(light)
 
        
     
