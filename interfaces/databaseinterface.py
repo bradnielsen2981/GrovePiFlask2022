@@ -7,6 +7,7 @@ import sqlite3
 import logging
 import sys
 
+ # Create the database by DATABASE = DatabaseInterface("test.sqlite")
 class DatabaseInterface:
 
     #location is the sqlitedatabase file
