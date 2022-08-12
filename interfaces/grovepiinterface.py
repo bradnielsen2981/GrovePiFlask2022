@@ -1,12 +1,18 @@
 import datetime, time, json, logging
 
-LOADED = True
+#TODO make the functionality thread proof incase it is being called by Flask.
+#In Flask, all view functions execute a new process. This can cause issues when a sensor 
+#is called twice. A way around this would be to create thread locks, or one thread that 
+#reads sensor data and stores the data where it can be accessed.
+
+LOADED = True #keep track if libries loaded
 try:
     import urlrequest
     import grove_rgb_lcd    
     import grovepi #must have installed grovepi library   
-    import grove_led_strip             
-except ImportError: #could be being called from flask file
+    #import grove_led_strip             
+except ImportError:
+    print("ERROR: Libraries could not be loaded.")
     LOADED = False #must be trying to run from the web server.
 
 class GrovePiInterface:
@@ -137,16 +143,24 @@ class GrovePiInterface:
 # ---------------------------------------------------------------------------------
 #SINGLETON - CREATE INSTANCE COMMAND FROM FILE
 def create_grovepi():
-    grove = None
+    GROVE = None
     if LOADED: #ensure libraries can load
-        grove = GrovePiInterface() #create instance and return
-    return grove
+        GROVE = GrovePiInterface() #create instance and return
+    return GROVE
 
 #-------------------------------------------------------------------------------\
 # TEST CODE - only runs from within file execution
 if __name__ == '__main__':
-    grove = GrovePiInterface()
-    if grove == None:
+    GROVE = create_grovepi()
+    time.sleep(2)
+    if GROVE == None:
         exit()
+    else:
+        GROVE.set_led_digitalport_value(2,0)
+        [temp,hum] = GROVE.read_temp_humidity_sensor_digitalport(3)
+        print(temp)
+        light = GROVE.read_light_analogueport(1)
+        print(light)
+
        
     

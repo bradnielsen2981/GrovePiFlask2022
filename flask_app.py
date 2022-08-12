@@ -9,7 +9,7 @@ app = Flask(__name__); app.debug = True
 SECRET_KEY = 'my random key can be anything' #this is used for encrypting sessions
 app.config.from_object(__name__) #Set app configuration using above SETTINGS
 logging.basicConfig(filename='logs/flask.log', level=logging.INFO)
-GLOBALS.DATABASE = databaseinterface.DatabaseInterface('databases/RobotDatabase.db', app.logger)
+GLOBALS.DATABASE = databaseinterface.DatabaseInterface('databases/GroveDatabase.db', app.logger)
 
 #Log messages
 def log(message):
