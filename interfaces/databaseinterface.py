@@ -9,6 +9,7 @@ import sys
 
 class DatabaseInterface:
 
+    #location is the sqlitedatabase file
     def __init__(self, location="", log = logging.getLogger(__name__)):
         self.location = location
         self.logger = log
