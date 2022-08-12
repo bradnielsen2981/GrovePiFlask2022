@@ -43,10 +43,10 @@ def login():
             message = "Login Unsuccessful"
     return render_template('login.html', data = message)    
 
-# Load the ROBOT
-@app.route('/robotload', methods=['GET','POST'])
-def robotload():
-    sensordict = None
+# Load the GROVE
+@app.route('/groveload', methods=['GET','POST'])
+def groveload():
+    data = None
     if not GLOBALS.CAMERA:
         log("LOADING CAMERA")
         try:
@@ -56,50 +56,24 @@ def robotload():
             GLOBALS.CAMERA = None
         if GLOBALS.CAMERA:
             GLOBALS.CAMERA.start()
-    if not GLOBALS.ROBOT: 
-        log("FLASK APP: LOADING THE ROBOT")
-        GLOBALS.ROBOT = mygrove.Robot(20, app.logger)
-        GLOBALS.ROBOT.configure_sensors() #defaults have been provided but you can 
-        GLOBALS.ROBOT.reconfig_IMU()
+    if not GLOBALS.GROVE: 
+        log("FLASK APP: LOADING THE GROVE")
+        GLOBALS.GROVE = mygrove.create_grovepi()
     if not GLOBALS.SOUND:
         log("FLASK APP: LOADING THE SOUND")
         GLOBALS.SOUND = soundinterface.SoundInterface()
         GLOBALS.SOUND.say("I am ready")
-    sensordict = GLOBALS.ROBOT.get_all_sensors()
-    return jsonify(sensordict)
+    return jsonify(data)
 
 # ---------------------------------------------------------------------------------------
 # Dashboard
 @app.route('/dashboard', methods=['GET','POST'])
-def robotdashboard():
+def dashboard():
     if not 'userid' in session:
         return redirect('/')
-    enabled = int(GLOBALS.ROBOT != None)
-    return render_template('dashboard.html', robot_enabled = enabled )
+    enabled = int(GLOBALS.GROVE != None)
+    return render_template('dashboard.html', GROVE_enabled = enabled )
 
-#Used for reconfiguring IMU
-@app.route('/reconfig_IMU', methods=['GET','POST'])
-def reconfig_IMU():
-    if GLOBALS.ROBOT:
-        GLOBALS.ROBOT.reconfig_IMU()
-        sensorconfig = GLOBALS.ROBOT.get_all_sensors()
-        return jsonify(sensorconfig)
-    return jsonify({'message':'ROBOT not loaded'})
-
-#calibrates the compass but takes about 10 seconds, rotate in a small 360 degrees rotation
-@app.route('/compass', methods=['GET','POST'])
-def compass():
-    data = {}
-    if GLOBALS.ROBOT:
-        data['message'] = GLOBALS.ROBOT.calibrate_imu(10)
-    return jsonify(data)
-
-@app.route('/sensors', methods=['GET','POST'])
-def sensors():
-    data = {}
-    if GLOBALS.ROBOT:
-        data = GLOBALS.ROBOT.get_all_sensors()
-    return jsonify(data)
 
 # YOUR FLASK CODE------------------------------------------------------------------------
 
@@ -167,25 +141,23 @@ def videofeed():
         return '', 204
         
 #----------------------------------------------------------------------------
-#Shutdown the robot, camera and database
+#Shutdown the GROVE, CAMERA and DATABASE
 def shutdowneverything():
     log("FLASK APP: SHUTDOWN EVERYTHING")
     if GLOBALS.CAMERA:
         GLOBALS.CAMERA.stop()
-    if GLOBALS.ROBOT:
-        GLOBALS.ROBOT.safe_exit()
-    GLOBALS.CAMERA = None; GLOBALS.ROBOT = None; GLOBALS.SOUND = None
+    GLOBALS.CAMERA = None; GLOBALS.GROVE = None; GLOBALS.SOUND = None
     return
 
 #Ajax handler for shutdown button
-@app.route('/robotshutdown', methods=['GET','POST'])
-def robotshutdown():
-    shutdowneverything()
-    return jsonify({'message':'robot shutdown'})
-
-#Shut down the web server if necessary
 @app.route('/shutdown', methods=['GET','POST'])
 def shutdown():
+    shutdowneverything()
+    return jsonify({'message':'GROVE shutdown'})
+
+#Shut down the web server if necessary
+@app.route('/servershutdown', methods=['GET','POST'])
+def servershutdown():
     shutdowneverything()
     func = request.environ.get('werkzeug.server.shutdown')
     func()
