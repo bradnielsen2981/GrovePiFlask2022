@@ -4,10 +4,6 @@ import mygrove #grove
 import global_vars as GLOBALS #load global variables
 import logging, time
 
-
-#THIS CODE IS NOT WORKING YET, IN THE PROCESS OF UPDATING!!!!!
-
-
 #Creates the Flask Server Object
 app = Flask(__name__); app.debug = True
 SECRET_KEY = 'my random key can be anything' #this is used for encrypting sessions
