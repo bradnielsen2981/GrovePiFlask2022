@@ -10,7 +10,7 @@ except ImportError: #could be being called from flask file
     LOADED = False #must be trying to run from the web server.
 
 class GrovePiInterface:
-
+    
     # Any initialisation code should be here - could keep track of ports
     def __init__(self, logger=logging.getLogger()):
         self.logger = logger 
@@ -23,7 +23,8 @@ class GrovePiInterface:
 
     # ------------------------ DEVICES -----------------------------
     # Turn on the led using digital port (1 or 0)
-    def set_led_digitalport_value(self, port, value=1):
+    @staticmethod
+    def set_led_digitalport_value(port, value=1):
         try:
             grovepi.pinMode(port,"OUTPUT") #should be in initialise
             grovepi.digitalWrite(port,value)
@@ -32,7 +33,8 @@ class GrovePiInterface:
         return
 
     # Display the time. Needs to start a Thread
-    def set_digit_display_time_digitalport(self, port):
+    @staticmethod
+    def set_digit_display_time_digitalport(port):
         grovepi.pinMode(port,"OUTPUT")
         grovepi.fourDigit_init(port)
         grovepi.fourDigit_on(port)
@@ -42,7 +44,8 @@ class GrovePiInterface:
         return
 
     # Display a number
-    def set_digit_display_number_digitalport(self, number,port):
+    @staticmethod
+    def set_digit_display_number_digitalport(number,port):
         leading_zero = 0
         grovepi.pinMode(port,"OUTPUT")
         grovepi.fourDigit_init(port)
@@ -52,13 +55,15 @@ class GrovePiInterface:
         return
 
     # OLED monitor - set_OLED_I2C1_RGBtuple_message((0,0,125),"It works!!")
-    def set_OLED_I2C1_RGBtuple_message(self, colour, message):   #colour is a tuple of (255,255,255)
+    @staticmethod
+    def set_OLED_I2C1_RGBtuple_message(colour, message):   #colour is a tuple of (255,255,255)
         grove_rgb_lcd.setRGB(*colour) 
         grove_rgb_lcd.setText(message)
         return
 
     # grove buzzer is turned on (1 or 0) - this is super annoying
-    def set_buzzer_digitalport(self, port, value=1):
+    @staticmethod
+    def set_buzzer_digitalport(port, value=1):
         grovepi.pinMode(port,"OUTPUT")
         grovepi.digitalWrite(port,value)
         return
@@ -70,14 +75,16 @@ class GrovePiInterface:
 
     # ------------------------ SENSORS -----------------------------
     # Read the distance using sound waves return centimeters (2-350cm)
-    def read_ultra_digitalport(self, port):
+    @staticmethod
+    def read_ultra_digitalport(port):
         grovepi.pinMode(port,"INPUT")
         distance = grovepi.ultrasonicRead(port)
         time.sleep(0.03)
         return distance 
 
     # Read water flow sensor
-    def read_waterflow_digitalport(self, port):
+    @staticmethod
+    def read_waterflow_digitalport(port):
         period = 2000
         grovepi.flowEnable(port,period)
         waterflow = grovepi.flowRead()
@@ -86,7 +93,8 @@ class GrovePiInterface:
         return waterflow
 
     # Read the PH Level
-    def read_ph_analogueport(self, port):
+    @staticmethod
+    def read_ph_analogueport(port):
         adc_ref = 5 #Reference voltage of ADC is 5v
         grovepi.pinMode(port,"INPUT")
         sensor_value = grovepi.analogRead(port)
@@ -94,37 +102,43 @@ class GrovePiInterface:
         return ph
 
     # Read Button return 0 or 1 
-    def read_button_digitalport(self, port):
+    @staticmethod
+    def read_button_digitalport(port):
         grovepi.pinMode(port,"INPUT")
         distance = grovepi.digitalRead(port)
         return distance 
 
     # Read temp (0 - 50 degrees Celsius) and humidity (20% - 90%)
-    def read_temp_humidity_sensor_digitalport(self, port):
+    @staticmethod
+    def read_temp_humidity_sensor_digitalport(port):
         grovepi.pinMode(port,"INPUT")
         temp_humidity_list = grovepi.dht(port,0)
         return temp_humidity_list #[temp,hum] = read_temp_humidity_sensor_digitalport(4) - break into parts
 
     # Read sound sensor returns analogue value 0 - 1023 loudness - to translate to decibels you need identify the distance
-    def read_sound_analogueport(self, port):
+    @staticmethod
+    def read_sound_analogueport(port):
         grovepi.pinMode(port,"INPUT")
         sound = grovepi.analogRead(port)
         return sound
 
     # Read the moisture sensor
-    def read_moisture_analogueport(self, port):
+    @staticmethod
+    def read_moisture_analogueport(port):
         grovepi.pinMode(port,"INPUT")
         moisture = grovepi.analogRead(port)
         return moisture
 
     # Read light sensor returns analogue value 0 - 1023 - not sure how to translate into lux
-    def read_light_analogueport(self, port):
+    @staticmethod
+    def read_light_analogueport(port):
         grovepi.pinMode(port,"INPUT")
         light = grovepi.analogRead(port)
         return light
 
     # read rotation sensor (Grove Rotary Angle Sensor) - can return voltage, degrees
-    def read_rotation_analogueport(self, port):
+    @staticmethod
+    def read_rotation_analogueport(port):
         adc_ref = 5 # Reference voltage of ADC is 5v
         grove_vcc = 5 # Vcc of the grove interface is normally 5v
         grovepi.pinMode(port,"INPUT")
@@ -147,6 +161,7 @@ def create_grovepi():
 if __name__ == '__main__':
     grove = GrovePiInterface()
     if grove == None:
+        grove.set_led_digitalport_value(1,1)
         exit()
        
     
