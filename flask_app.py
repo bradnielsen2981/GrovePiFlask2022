@@ -9,7 +9,7 @@ app = Flask(__name__); app.debug = True
 SECRET_KEY = 'my random key can be anything' #this is used for encrypting sessions
 app.config.from_object(__name__) #Set app configuration using above SETTINGS
 logging.basicConfig(filename='logs/flask.log', level=logging.INFO)
-GLOBALS.DATABASE = databaseinterface.DatabaseInterface('databases/RobotDatabase.db', app.logger)
+GLOBALS.DATABASE = databaseinterface.DatabaseInterface('databases/GroveDatabase.db', app.logger)
 
 #Log messages
 def log(message):
@@ -68,7 +68,8 @@ def dashboard():
     if not 'userid' in session:
         return redirect('/')
     enabled = int(GLOBALS.GROVE != None)
-    return render_template('dashboard.html', grove_enabled = enabled )
+    return render_template('dashboard.html', GROVE_enabled = enabled )
+
 
 # YOUR FLASK CODE------------------------------------------------------------------------
 
@@ -136,7 +137,7 @@ def videofeed():
         return '', 204
         
 #----------------------------------------------------------------------------
-#Shutdown the robot, camera and database
+#Shutdown the GROVE, CAMERA and DATABASE
 def shutdowneverything():
     log("FLASK APP: SHUTDOWN EVERYTHING")
     if GLOBALS.CAMERA:
@@ -145,8 +146,8 @@ def shutdowneverything():
     return
 
 #Shut down the web server if necessary
-@app.route('/shutdown', methods=['GET','POST'])
-def shutdown():
+@app.route('/servershutdown', methods=['GET','POST'])
+def servershutdown():
     shutdowneverything()
     func = request.environ.get('werkzeug.server.shutdown')
     func()

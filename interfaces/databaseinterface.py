@@ -7,8 +7,10 @@ import sqlite3
 import logging
 import sys
 
+ # Create the database by DATABASE = DatabaseInterface("test.sqlite")
 class DatabaseInterface:
 
+    #location is the sqlitedatabase file
     def __init__(self, location="", log = logging.getLogger(__name__)):
         self.location = location
         self.logger = log
@@ -22,6 +24,7 @@ class DatabaseInterface:
 
     # A helper function to save time and also log sql errors
     # Write your Select Query, and pass in a Tuple (a,b,c etc) representing any parameters
+    # If you only have one param, you still need to use a Tuple .e.g (userid,)
     def ViewQuery(self, query, params=None):
         connection = self.connect()
         result = None
